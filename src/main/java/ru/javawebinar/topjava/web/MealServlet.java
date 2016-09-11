@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -23,10 +25,11 @@ public class MealServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOG.debug("redirect to mealList");
-        List<MealWithExceed> filteredWithExceeded =
-                MealsUtil.getFilteredWithExceeded(LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
-
-        request.setAttribute("filter", filteredWithExceeded);
+        List<MealWithExceed> mealWithExceeds =
+                MealsUtil.getFilteredWithExceeded(LocalTime.of(0, 0), LocalTime.of(23, 59), 2000);
+        request.setAttribute("filter", mealWithExceeds);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        request.setAttribute("format", formatter);
         request.getRequestDispatcher("/mealList.jsp").forward(request, response);
     }
 }
