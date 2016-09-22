@@ -23,7 +23,7 @@ public abstract class AbstractUserController {
     }
 
     public User get(int id) {
-        LOG.info("get " + id);
+        LOG.info("getMeal " + id);
         return service.get(id);
     }
 

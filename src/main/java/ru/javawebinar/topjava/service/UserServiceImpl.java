@@ -13,7 +13,7 @@ import java.util.List;
  * GKislin
  * 06.03.2015.
  */
-@Service
+
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public List<User> getAll() {
-        return repository.getAll();
+        return (List<User>) repository.getAll();
     }
 
     public void update(User user) {

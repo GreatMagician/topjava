@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.repository.mock;
 
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
 
@@ -8,6 +9,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * GKislin
@@ -16,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class InMemoryMealRepositoryImpl implements MealRepository {
     private Map<Integer, Meal> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
-
+    private User user;
     {
         MealsUtil.MEALS.forEach(this::save);
     }
@@ -36,13 +38,25 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public Meal get(int id) {
+    public Meal getMeal(int id) {
         return repository.get(id);
     }
 
     @Override
+    public User getUser() {
+        return user;
+    }
+
+    @Override
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Override
     public Collection<Meal> getAll() {
-        return repository.values();
+        return repository.values().stream()
+                .sorted((o1, o2) -> -o1.getDateTime().compareTo(o2.getDateTime()))
+                .collect(Collectors.toList());
     }
 }
 
